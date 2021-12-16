@@ -3,9 +3,9 @@ FROM nikolaik/python-nodejs:python3.8-nodejs12
 
 ENV NODE_ENV=local 
 ENV MIDWAY_LOGGER_DISABLE_COLORS=true 
-ENV SKYWALKING_SERVICE=artery-btc-microservice
-ENV SKYWALKING_INSTANCE=artery-btc-microservice-instance
-ENV SKYWALKING_COLLECTOR=skywalking-oap.skywalking.svc.cluster.local:11800
+ENV SKYWALKING_SERVICE=*
+ENV SKYWALKING_INSTANCE=*-instance
+ENV SKYWALKING_COLLECTOR=*:11800
 ENV SKYWALKING_DISABLE_PLUGIN=mysql2
 
 WORKDIR /root 
