@@ -1,0 +1,27 @@
+FROM nikolaik/python-nodejs:python3.8-nodejs12
+
+
+ENV NODE_ENV=local 
+ENV MIDWAY_LOGGER_DISABLE_COLORS=true 
+ENV SKYWALKING_SERVICE=artery-btc-microservice
+ENV SKYWALKING_INSTANCE=artery-btc-microservice-instance
+ENV SKYWALKING_COLLECTOR=skywalking-oap.skywalking.svc.cluster.local:11800
+ENV SKYWALKING_DISABLE_PLUGIN=mysql2
+
+WORKDIR /root 
+
+COPY . .
+
+RUN npm i midway-bin \
+    && npm i \
+    && npm run build \
+    && npm rebuild \
+    && npm run pkg-linux \
+    && ls |grep -v -E "^so|shiralee"|xargs -i rm -rf {} \
+    && cd so \
+    && ls |grep -v *${NODE_ENV}.so|xargs -i rm -rf {}
+
+EXPOSE 7001
+
+# 使用打包后的
+CMD ["/root/shiralee"]

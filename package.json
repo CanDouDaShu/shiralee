@@ -1,0 +1,16 @@
+{
+    "name": "shiralee",
+    "version": "1.1.1",
+    "author": "Lingjie Chen <673014764@qq.com>",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/CanDouDaShu/shiralee.git"
+    },
+    "boilerplateConfig": {
+      "root": "boilerplate"
+    },
+    "files": [
+      "boilerplate",
+      "index.js"
+    ]
+  }

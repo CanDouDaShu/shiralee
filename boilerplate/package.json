@@ -1,0 +1,115 @@
+{
+  "name": "shiralee",
+  "version": "1.0.4",
+  "description": "test way of frame publish",
+  "private": false,
+  "dependencies": {
+    "@grpc/grpc-js": "^1.2.1",
+    "@midwayjs/bootstrap": "^2.3.0",
+    "@midwayjs/cache": "^2.13.4",
+    "@midwayjs/core": "^2.3.0",
+    "@midwayjs/decorator": "^2.3.0",
+    "@midwayjs/hooks": "^2.3.0",
+    "@midwayjs/koa": "^2.3.0",
+    "@midwayjs/logger": "^2.13.0",
+    "@midwayjs/orm": "^2.13.4",
+    "@midwayjs/prometheus": "^2.13.4",
+    "@midwayjs/redis": "^2.13.4",
+    "ajv": "^8.8.1",
+    "base-64": "^1.0.0",
+    "bignumber.js": "^9.0.1",
+    "cfork": "^1.8.0",
+    "debug": "^4.3.2",
+    "eosjs": "^22.0.0",
+    "ethers": "^5.4.1",
+    "ffi-napi": "^4.0.3",
+    "hash.js": "^1.1.7",
+    "json-stable-stringify": "^1.0.1",
+    "koa-bodyparser": "^4.3.0",
+    "lodash": "^4.17.21",
+    "midway": "^2.13.2",
+    "midway-bin": "^1.20.3",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.2.5",
+    "nacos": "^2.2.0",
+    "node-rsa": "^1.1.1",
+    "pkg": "^5.3.0",
+    "ref-struct-napi": "^1.1.1",
+    "request": "^2.88.2",
+    "secp256k1": "^4.0.2",
+    "skywalking-backend-js": "^0.3.0",
+    "stellar-sdk": "^8.2.3",
+    "typeorm": "^0.2.40"
+  },
+  "devDependencies": {
+    "npminstall": "^3.20.2",
+    "autod": "^3.0.1",
+    "@midwayjs/cli": "^1.0.0",
+    "@midwayjs/luckyeye": "^1.0.0",
+    "@midwayjs/mock": "^2.3.0",
+    "@types/ioredis": "^4.28.1",
+    "@types/jest": "^26.0.10",
+    "@types/koa-bodyparser": "^4.3.0",
+    "@types/node": "14",
+    "cross-env": "^6.0.0",
+    "jest": "^26.4.0",
+    "mwts": "^1.0.5",
+    "patch-package": "^6.4.7",
+    "swagger-ui-dist": "^3.48.0",
+    "ts-jest": "^26.2.0",
+    "typescript": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "scripts": {
+    "autod": "autod",
+    "pkg-macos": "pkg . -t node12-macos-x64 --out-path=",
+    "pkg-linux": "pkg . -t node12-linux-x64 --out-path=",
+    "start": "NODE_ENV=production node ./server.js",
+    "starttest": "NODE_ENV=test node ./server.js",
+    "devtest": "NODE_ENV=local node ./server.js",
+    "dev": "cross-env NODE_ENV=local midway-bin dev --ts",
+    "test": "midway-bin test --ts",
+    "cov": "midway-bin cov --ts",
+    "lint": "mwts check",
+    "lint:fix": "mwts fix",
+    "ci": "npm run cov",
+    "build": "midway-bin build -c",
+    "check": "luckyeye"
+  },
+  "bin": "./bootstrap.js",
+  "homepage": "https://github.com/CanDouDaShu/shiralee.git",
+  "bugs": "https://github.com/CanDouDaShu/shiralee/issues",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:CanDouDaShu/shiralee.git"
+  },
+  "pkg": {
+    "scripts": [
+      "./dist/**/*.js",
+      "./bootstrap.js"
+    ],
+    "assets": [
+      "./node_modules/ref-napi/**/*",
+      "./node_modules/ffi-napi/**/*",
+      "./node_modules/ref-struct-napi/**/*",
+      "./node_modules/node-gyp-build/**/*",
+      "./node_modules/grpc/**/*"
+    ],
+    "targets": [
+      "node12-linux-x64"
+    ]
+  },
+  "midway-bin-clean": [
+    ".vscode/.tsbuildinfo",
+    "dist"
+  ],
+  "midway-luckyeye": {
+    "packages": [
+      "midway_v2"
+    ]
+  },
+  "author": "clj",
+  "license": "MIT"
+}
