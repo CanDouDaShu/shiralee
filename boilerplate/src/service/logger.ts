@@ -130,7 +130,7 @@ export class LoggerService {
     if (isObject(arg0)) {
       data = arg0;
     }
-    const stack = info.stack || data['stack'];
+    const stack = info.stack || data['stack'] || info.message;
     if (stack) {
       logData['S'] = stack;
     }
@@ -144,6 +144,7 @@ export class LoggerService {
     let requestId: string;
     let traceId: string;
     let methodName: string;
+    const sw8 = this.sw8(info.ctx?.req?.header['sw8']);
     const logData = {};
     if (isObject(arg0)) {
       requestId = arg0['requestId'];
@@ -153,6 +154,7 @@ export class LoggerService {
     const ext: ILogDataExt = {
       requestId,
       traceId,
+      sw8,
       methodName,
       data: '',
     };
@@ -220,10 +222,45 @@ export class LoggerService {
   }
 
   private getApmInfo(sw8: string): ILogDataApm {
+    // https://github.com/apache/skywalking/blob/master/docs/en/protocols/Skywalking-Cross-Process-Propagation-Headers-Protocol-v3.md
     const items = (sw8 || '').split('-');
     return {
       trace: Buffer.from(items[1], 'base64').toString(),
       span: items[3],
     };
+  }
+
+  private sw8(sw8: string): ILogDataApm {
+    if (sw8) {
+      const items = (sw8 || '').split('-');
+      /** 0 或 1. 0 表示上下文存在, 但是可以(也很可能)忽略. 1 表示此追踪需要采样并发送到后端 */
+      const sample = items[0];
+      /** 字符串(BASE64 编码). 由 . 分割的三个 long 类型值, 表示此追踪的唯一标识. */
+      const trace = Buffer.from(items[1], 'base64').toString();
+      /** 父追踪段 ID(Parent trace segment Id). 字符串(BASE64 编码). 字符串且全局唯一. */
+      const parentTraceSegmentId = Buffer.from(items[2], 'base64').toString();
+      /** 父 Span 标识. 整数. 从 0 开始. 此 Span ID 指向了父追踪段中的 Span. */
+      const span = items[3];
+      /** 父服务. 字符串(BASE64 编码). 长度不应小于或等于50个UTF-8编码的字符. */
+      const parentService = Buffer.from(items[4], 'base64').toString('utf-8');
+      /** 父服务实例标识. 字符串(BASE64 编码). 长度不应小于或等于50个UTF-8编码的字符. */
+      const parentServiceInstance = Buffer.from(items[5], 'base64').toString(
+        'utf-8'
+      );
+      /** 父服务的端点. 字符串(BASE64 编码). 父追踪段中第一个入口span的操作名. 长度不应小于或等于50个UTF-8编码的字符. */
+      const parentEndpoint = Buffer.from(items[6], 'base64').toString('utf-8');
+      /** 本请求的目标地址. 字符串(BASE64 编码). 客户端用于访问目标服务的网络地址(不一定是 IP + 端口). */
+      const destinationIpAndPort = Buffer.from(items[7], 'base64').toString();
+      return {
+        sample,
+        trace,
+        parentTraceSegmentId,
+        span,
+        parentService,
+        parentServiceInstance,
+        parentEndpoint,
+        destinationIpAndPort,
+      };
+    }
   }
 }

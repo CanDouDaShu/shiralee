@@ -19,20 +19,19 @@ export class ErrorHandlerMiddleware implements IWebMiddleware {
     ): Promise<void> => {
       try {
         await next();
-        if (ctx.status === 404)
+        if (ctx.status === 404) {
           ctx.body = {
             success: false,
             status: 404,
-            message: 'not found',
+            message: '[Shiralee] not found',
           };
-        if (!ctx.body['result']) {
-          throw new Error('Internal Server Error');
         }
       } catch (error) {
         const { success = false, status = 500, message } = error;
+        /** todo 需不需要在线上限制强刷 */
         const errorMessage =
           ctx.status === 500 && isEnv('prod')
-            ? 'Internal Server Error'
+            ? '[Shiralee] Internal Server Error'
             : message;
         ctx.body = { success, status, errorMessage };
       }

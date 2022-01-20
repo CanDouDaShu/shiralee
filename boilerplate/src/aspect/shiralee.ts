@@ -10,40 +10,44 @@ import { ILogger } from '@midwayjs/logger';
 import { getIds } from '../util/common';
 import { Context } from '@midwayjs/koa';
 import { LoggerName } from '../interface';
+import { performance } from 'perf_hooks';
+import { ShiraleeService } from '../service/shiralee';
 
 @Provide()
-@Aspect([]) // todo 加入需要AOP的类名
+@Aspect([ShiraleeService]) //todo 需要加入监听的类名
 export class ReportInfo implements IMethodAspect {
   @Logger(LoggerName)
   logger: ILogger;
   @Inject()
   ctx: Context;
 
+  private functionTimeInterval: number;
+  private functionTimeEnter: number;
+
   async before(point: JoinPoint) {
+    this.functionTimeEnter = performance.now();
     const { requestId, traceId, methodName } = getIds(point);
-    this.logger.info({ requestId, traceId, methodName }, 'before');
+    this.logger.info({ requestId, traceId, methodName }, { step: 'before' });
   }
 
   async after(point: JoinPoint, result, error) {
+    this.functionTimeInterval = performance.now() - this.functionTimeEnter;
     const { requestId, traceId, methodName } = getIds(point);
-    if (error) {
-      this.logger.warn(
-        { requestId, traceId, methodName },
-        JSON.stringify(error)
-      );
-      return;
-    }
     this.logger.info(
-      { requestId, traceId, methodName },
-      JSON.stringify(result)
+      { originArgs: [{ requestId, traceId, methodName }] },
+      this.functionTimeInterval
     );
-  }
-
-  async afterThrow(point: JoinPoint, error) {
-    const { requestId, traceId, methodName } = getIds(point);
-    this.logger.error(
-      { requestId, traceId, methodName },
-      JSON.stringify(error)
-    );
+    if (error) {
+      this.logger.error(error, {
+        originArgs: [{ requestId, traceId, methodName }],
+        step: 'after',
+      });
+      throw new Error(error.message);
+    } else {
+      this.logger.info(
+        { originArgs: [{ requestId, traceId, methodName }] },
+        JSON.stringify(result)
+      );
+    }
   }
 }

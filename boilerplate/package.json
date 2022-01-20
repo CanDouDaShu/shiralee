@@ -4,9 +4,8 @@
   "description": "test way of frame publish",
   "private": false,
   "dependencies": {
-    "@grpc/grpc-js": "^1.2.1",
     "@midwayjs/bootstrap": "^2.3.0",
-    "@midwayjs/cache": "^2.13.4",
+    "@midwayjs/cache": "^2.14.0",
     "@midwayjs/core": "^2.3.0",
     "@midwayjs/decorator": "^2.3.0",
     "@midwayjs/hooks": "^2.3.0",
@@ -15,24 +14,31 @@
     "@midwayjs/orm": "^2.13.4",
     "@midwayjs/prometheus": "^2.13.4",
     "@midwayjs/redis": "^2.13.4",
+    "@zilliqa-js/crypto": "^3.3.3",
     "ajv": "^8.8.1",
+    "axios": "^0.24.0",
     "base-64": "^1.0.0",
+    "bech32": "^2.0.0",
     "bignumber.js": "^9.0.1",
     "cfork": "^1.8.0",
     "debug": "^4.3.2",
     "eosjs": "^22.0.0",
     "ethers": "^5.4.1",
     "ffi-napi": "^4.0.3",
+    "grpc": "^1.24.10",
     "hash.js": "^1.1.7",
     "json-stable-stringify": "^1.0.1",
     "koa-bodyparser": "^4.3.0",
     "lodash": "^4.17.21",
     "midway": "^2.13.2",
     "midway-bin": "^1.20.3",
+    "moment": "^2.29.1",
     "mysql": "^2.18.1",
     "mysql2": "^2.2.5",
     "nacos": "^2.2.0",
     "node-rsa": "^1.1.1",
+    "os": "^0.1.2",
+    "perf_hooks": "0.0.1",
     "pkg": "^5.3.0",
     "ref-struct-napi": "^1.1.1",
     "request": "^2.88.2",
@@ -42,13 +48,12 @@
     "typeorm": "^0.2.40"
   },
   "devDependencies": {
-    "npminstall": "^3.20.2",
-    "autod": "^3.0.1",
     "@midwayjs/cli": "^1.0.0",
     "@midwayjs/luckyeye": "^1.0.0",
     "@midwayjs/mock": "^2.3.0",
     "@types/ioredis": "^4.28.1",
     "@types/jest": "^26.0.10",
+    "@types/lodash": "^4.14.170",
     "@types/koa-bodyparser": "^4.3.0",
     "@types/node": "14",
     "cross-env": "^6.0.0",
@@ -63,12 +68,12 @@
     "node": ">=12.0.0"
   },
   "scripts": {
-    "autod": "autod",
-    "pkg-macos": "pkg . -t node12-macos-x64 --out-path=",
-    "pkg-linux": "pkg . -t node12-linux-x64 --out-path=",
+    "pkg-macos": "pkg . -t node12-macos-x64 --out-path= -o artery-zil-microservice",
+    "pkg-linux": "pkg . -t node12-linux-x64 --out-path= -o artery-zil-microservice",
     "start": "NODE_ENV=production node ./server.js",
     "starttest": "NODE_ENV=test node ./server.js",
-    "devtest": "NODE_ENV=local node ./server.js",
+    "starttestnet": "NODE_ENV=testnet node ./server.js",
+    "devtest": "NODE_ENV=local node ./bootstrap.js",
     "dev": "cross-env NODE_ENV=local midway-bin dev --ts",
     "test": "midway-bin test --ts",
     "cov": "midway-bin cov --ts",
@@ -79,12 +84,6 @@
     "check": "luckyeye"
   },
   "bin": "./bootstrap.js",
-  "homepage": "https://github.com/CanDouDaShu/shiralee.git",
-  "bugs": "https://github.com/CanDouDaShu/shiralee/issues",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:CanDouDaShu/shiralee.git"
-  },
   "pkg": {
     "scripts": [
       "./dist/**/*.js",
@@ -92,6 +91,8 @@
     ],
     "assets": [
       "./node_modules/ref-napi/**/*",
+      "./node_modules/cache-manager/**/*",
+      "./node_modules/lodash/**/*",
       "./node_modules/ffi-napi/**/*",
       "./node_modules/ref-struct-napi/**/*",
       "./node_modules/node-gyp-build/**/*",
@@ -110,6 +111,10 @@
       "midway_v2"
     ]
   },
-  "author": "clj",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "anonymous",
   "license": "MIT"
 }

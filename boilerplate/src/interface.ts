@@ -12,6 +12,55 @@ export interface ISlackconf {
   slackURI: string;
 }
 
+// 链上查询接口
+export interface IChain {
+  chain: string;
+  coin: string;
+  txHash: string;
+  toAddress?: string;
+  blockHash?: string;
+  expandAll?: string;
+  contractAddr?: string;
+  requestId?: string;
+}
+
+/** 查链服务塞数据库接口 */
+export interface ChainInfoToDB {
+  chain: string;
+  coin: string;
+  createTime?: bigint;
+  updateTime?: bigint;
+}
+
+export interface IChainConf {
+  host: string;
+  au_api_key?: string;
+  dfuse_api_host?: string;
+  username?: string;
+  password?: string;
+  port?: number;
+  network?: string; // testnet or mainnet
+}
+
+export interface IChainInfo {
+  toAddress: Array<string>;
+  amount: Array<string | number>;
+  timestamp: number;
+  confirms: number;
+  fromAddress: Array<string>;
+  extraData?: Array<IExtra>;
+  ifFromChainFlag?: boolean;
+}
+export interface IExtra {
+  logIndex: number;
+  fromAddress: string;
+  toAddress: string;
+  amount: string;
+}
+export interface IChainParams {
+  iChain: IChain;
+  iConfig: IChainConf;
+}
 export interface IReqParams {
   url: string;
   body?: object | string;
@@ -68,16 +117,23 @@ export interface ISlackNotificationResult {
 export interface ILogDataApm {
   trace: string;
   span: string;
+  sample?: string;
+  parentTraceSegmentId?: string;
+  parentService?: string;
+  parentServiceInstance?: string;
+  parentEndpoint?: string;
+  destinationIpAndPort?: string;
 }
 
-export const LoggerName = 'bybit-log';
+export const LoggerName = 'artery-zil-microservice-log';
 
 // 自由字段
 export interface ILogDataExt {
   requestId?: string;
   traceId?: string;
+  sw8?: ILogDataApm;
   methodName?: string;
-  data?: string; //
+  data?: string;
 }
 // log从参数中获取到的参数
 export interface ILogData {

@@ -4,7 +4,7 @@ const logDir = path.join(process.cwd(), './logs/');
 const hostname = os.hostname();
 
 export default {
-  keys: 'candoudashu19881112',
+  keys: 'candoudashu19960816',
   applicationName: 'bybit',
   security: {
     csrf: {
