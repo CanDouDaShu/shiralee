@@ -125,7 +125,7 @@ export interface ILogDataApm {
   destinationIpAndPort?: string;
 }
 
-export const LoggerName = 'artery-zil-microservice-log';
+export const LoggerName = 'shiralee-log';
 
 // 自由字段
 export interface ILogDataExt {

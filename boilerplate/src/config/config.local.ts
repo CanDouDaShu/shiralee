@@ -2,11 +2,11 @@ export default {
   nacos: {
     nacosServer: {
       mid: {
-        serverAddr: '192.168.57.101:8848',
+        serverAddr: '192.168.57.72:8848',
         namespace: 'public',
       },
       app: {
-        serverAddr: '192.168.57.101:8848',
+        serverAddr: '192.168.57.72:8848',
         namespace: 'public',
       },
     },
@@ -22,13 +22,13 @@ export default {
     },
   },
   encryption: {
-    useSo: false,
-    soPwd: './so/*',
+    useSechub: false,
+    sechub: {},
   },
   redis: {
     client: {
       port: 6379,
-      host: '192.168.57.101',
+      host: '127.0.0.1',
       password: '',
       db: 0,
       prefix: 'argus:artery:',
@@ -36,8 +36,7 @@ export default {
   },
   endpoint: {
     lark: {
-      robot:
-        'https://shiralee',
+      robot: 'https://shiralee',
       secret: 'shiralee',
       userId: 'shiralee',
     },
@@ -46,7 +45,7 @@ export default {
   shiralee: {
     orm: [
       {
-        host: '192.168.57.101',
+        host: '192.168.57.72',
         port: 3306,
         username: 'root',
         password: 'root',

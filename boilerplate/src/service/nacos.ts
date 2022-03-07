@@ -8,14 +8,13 @@ import {
 } from '@midwayjs/decorator';
 import { IMidwayApplication } from '@midwayjs/core';
 import { NacosConfigClient } from 'nacos';
-import { decryptFromSo } from '../util/so';
+import { decryptFromSechub } from '../util/sechub';
 
 @Scope(ScopeEnum.Singleton)
 @Provide()
 export class RemoteConfigService {
   @Config('nacos') private nacosConf;
   @Config('encryption') private encryptionConf;
-
   @App() private app: IMidwayApplication;
   @Init() protected async init(): Promise<void> {
     /** 初始化中间件配置 */
@@ -24,19 +23,6 @@ export class RemoteConfigService {
     const nacosAppClient = new NacosConfigClient(nacosServer.app);
     await nacosMidClient.ready();
     await nacosAppClient.ready();
-
-    /** 初始化中间件配置 */
-    const midConf = await nacosMidClient.getConfig(
-      nacosMiddleware.dataId,
-      nacosMiddleware.group
-    );
-
-    const useMidconf =
-      this.encryptionConf.useSo === true
-        ? await decryptFromSo(midConf, this.encryptionConf.soPwd)
-        : midConf;
-
-    this.app.addConfigObject({ ...JSON.parse(useMidconf) });
 
     /** 初始化应用配置 */
     const appConf = await nacosAppClient.getConfig(
@@ -56,5 +42,18 @@ export class RemoteConfigService {
         }
       );
     }
+
+    /** 初始化中间件配置 */
+    const midConf = await nacosMidClient.getConfig(
+      nacosMiddleware.dataId,
+      nacosMiddleware.group
+    );
+
+    const useMidconf =
+      this.encryptionConf.useSechub === true
+        ? await decryptFromSechub(midConf, JSON.parse(appConf).sechub)
+        : midConf;
+
+    this.app.addConfigObject({ ...JSON.parse(useMidconf) });
   }
 }

@@ -28,7 +28,7 @@ export class ErrorHandlerMiddleware implements IWebMiddleware {
         }
       } catch (error) {
         const { success = false, status = 500, message } = error;
-        /** todo 需不需要在线上限制强刷 */
+        /** 线上限制强刷 */
         const errorMessage =
           ctx.status === 500 && isEnv('prod')
             ? '[Shiralee] Internal Server Error'

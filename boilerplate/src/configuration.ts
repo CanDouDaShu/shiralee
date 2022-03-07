@@ -72,8 +72,8 @@ export class ContainerLifeCycle implements ILifeCycle {
     );
     this.shiralee.orm.forEach(async db => {
       newOrmConfig.push({ ...db, name: db.name });
-      await createConnections(newOrmConfig);
     });
+    await createConnections(newOrmConfig);
     this.app.use(await bodyParser());
     this.app.use(await this.app.generateMiddleware('errorHandlerMiddleware'));
     this.app.use(await this.app.generateMiddleware('performanceMiddleware'));

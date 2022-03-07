@@ -14,7 +14,7 @@ export default {
   cache: {
     store: 'memory',
     options: {
-      max: 100,
+      max: 100, // 防爆
       ttl: 3600, // 修改默认的ttl配置
     },
   },
